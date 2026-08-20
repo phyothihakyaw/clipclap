@@ -1,11 +1,13 @@
 # Contributing to Clipclap
 
-Thanks for helping improve Clipclap.
-This project is a local-first browser extension for clipping, rewriting, and saving notes or text.
-Please keep user privacy and save-folder safety as hard requirements.
+Clipclap is meant to keep growing: more browsers, clearer rewriting options, better note destinations, and anything that keeps it local-first and useful.
 
-Users install from the Chrome Web Store.
-This document is for people building from source or cutting releases.
+The **Chrome Web Store listing** is the product users should install and update.
+This repo is where we build and improve that extension together.
+Load unpacked builds are for development and review, not a parallel install path for end users.
+
+Thanks for helping make Clipclap better.
+Please keep user privacy and save-folder safety as hard requirements.
 
 ## Ground rules
 
@@ -19,6 +21,18 @@ This document is for people building from source or cutting releases.
   For rewriting, v1 is OpenRouter-only: say “OpenRouter API key” in user-facing copy so people do not paste keys from other providers.
   Broader provider support can loosen that wording later.
 - Design changes so they can grow beyond Chromium and beyond a single note app (plain text and other targets are in scope for later releases).
+
+## Ideas that help the project grow
+
+Good contributions include:
+
+- Clearer setup and rewrite UX
+- Stronger clipping on messy pages (including media references)
+- Extra destinations or templates without locking to one note app
+- Support for more AI providers and browsers
+- Docs, tests, and accessibility fixes
+
+Open an issue to discuss larger ideas before a big PR when you can.
 
 ## Development setup
 
@@ -39,13 +53,13 @@ npm run dev
    - Save folder
    - Optional auto rewrite / auto save
 
-Production build:
+Production build (for local verification):
 
 ```bash
 npm run build
 ```
 
-Load `.output/chrome-mv3` the same way.
+Load `.output/chrome-mv3` the same way while testing.
 
 Useful scripts:
 
@@ -70,7 +84,7 @@ Useful scripts:
 3. Run `npm run compile` and `npm run build` before opening a PR.
 4. Describe the user-facing impact and any permission or network changes.
 
-## Releasing
+## Releasing (maintainers)
 
 CI runs on every push and pull request (`npm run compile` + `npm run build`).
 
@@ -78,11 +92,11 @@ Maintainers cut releases from GitHub Actions (**Release** workflow), not from ad
 
 1. Ensure the default branch is green on CI
 2. Actions → **Release** → **Run workflow** → choose `patch` / `minor` / `major`
-3. The job bumps the version, zips the extension, pushes tag `vX.Y.Z`, and creates a GitHub Release with the Chrome zip attached
-4. Download that zip from the GitHub Release and upload it manually in the Chrome Web Store developer dashboard
+3. The job bumps the version, zips the extension, pushes tag `vX.Y.Z`, and creates a GitHub Release
+4. Maintainers publish the new package to the Chrome Web Store so store users get the update
 
-A GitHub Release zip does not auto-update Load unpacked installs.
-Chrome Web Store listing updates installed users after you publish the package there.
+The store listing remains the source of truth for what people install.
+GitHub Releases document what shipped; they are not a substitute install channel for general users.
 
 ## Reporting security issues
 

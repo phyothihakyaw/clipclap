@@ -12,6 +12,7 @@ No telemetry.
 Your OpenRouter API key, clips, and saved files stay on your device (aside from the rewrite request you choose to send to OpenRouter).
 
 Install from the Chrome Web Store.
+That listing is the supported way to install and update Clipclap.
 
 ## Why it exists
 
@@ -120,7 +121,10 @@ See [SECURITY.md](SECURITY.md) for reporting issues.
 
 ## Contributing
 
-Source builds, local development, and release workflows: [CONTRIBUTING.md](CONTRIBUTING.md).
+Clipclap should keep getting better.
+The Chrome Web Store extension is what users install; this repo is where we grow it.
+
+Ideas, issues, and pull requests welcome: [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 

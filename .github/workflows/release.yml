@@ -72,9 +72,10 @@ jobs:
             echo "Released ${DATE}."
             echo
             echo "- Chrome package: \`${ZIP}\`"
-            echo "- Install via Chrome Web Store when published, or Load unpacked from the unzipped build"
+            echo "- Install and update from the Chrome Web Store"
             echo
             echo "See [RELEASE_NOTES.md](RELEASE_NOTES.md) and [README.md](README.md) for product details."
+            echo "Developers: [CONTRIBUTING.md](CONTRIBUTING.md)."
           } > .release-body.md
 
           {

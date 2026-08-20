@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Privacy Policy — Clipclap</title>
+    <meta
+      name="description"
+      content="Privacy policy for the Clipclap browser extension: what data stays on your device and when OpenRouter is used."
+    />
+    <link rel="icon" href="assets/icon.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="doc">
+    <article class="doc-page">
+      <p class="doc-nav"><a href="./">← Clipclap</a></p>
+      <h1>Privacy Policy</h1>
+      <p class="doc-meta">Last updated: 21 August 2026</p>
+
+      <p>
+        Clipclap is a local-first Chromium browser extension.
+        This policy describes what data Clipclap handles and where it goes.
+      </p>
+
+      <h2>Summary</h2>
+      <ul>
+        <li>Clipclap does not operate a Clipclap backend, account system, or telemetry.</li>
+        <li>Your OpenRouter API key, settings, and saved files stay on your device.</li>
+        <li>
+          When you rewrite a clip (or enable auto-rewrite), Clipclap sends clip text to
+          <a href="https://openrouter.ai/" rel="noopener noreferrer">OpenRouter</a>
+          using your API key.
+        </li>
+      </ul>
+
+      <h2>Data Clipclap handles</h2>
+      <h3>Authentication information</h3>
+      <p>
+        If you paste an OpenRouter API key, Clipclap stores it in browser extension storage on your
+        device.
+        The key is sent to OpenRouter only when Clipclap calls OpenRouter’s API (rewrite or model
+        list).
+      </p>
+
+      <h3>Website content</h3>
+      <p>
+        When you clip a page or selection, Clipclap reads that page’s content (for example text and
+        media links) in the active tab so it can show a review window and save a file.
+        Clipped content is kept in temporary session storage on your device for that flow.
+      </p>
+
+      <h3>Settings and save folder</h3>
+      <p>
+        Settings (format, model, tones, and similar options) are stored in extension storage on your
+        device.
+        The save-folder permission is stored locally via the File System Access API (IndexedDB
+        handle).
+        Saved <code>.md</code> or <code>.txt</code> files are written only to the folder you grant.
+      </p>
+
+      <h2>What Clipclap does not collect</h2>
+      <p>
+        Clipclap does not collect personally identifiable information, health data, financial data,
+        location, browsing history lists, or activity monitoring (such as keystroke or click
+        logging) as product features.
+        Clipclap does not create a Clipclap account and does not run analytics or advertising
+        trackers.
+      </p>
+
+      <h2>Third parties</h2>
+      <p>
+        Clipclap does not sell user data.
+        The only third-party service Clipclap contacts is OpenRouter, and only for features you use:
+      </p>
+      <ul>
+        <li>Listing models (with your API key).</li>
+        <li>Rewriting clip text (with your API key), when you request a rewrite or enable auto-rewrite.</li>
+      </ul>
+      <p>
+        OpenRouter’s handling of that data is governed by OpenRouter’s own terms and privacy policy.
+        Clipclap does not send your data to a Clipclap-operated server.
+      </p>
+
+      <h2>Data retention</h2>
+      <p>
+        Data in extension storage and session storage remains on your device until you clear it,
+        uninstall the extension, or change browser storage.
+        Files in your chosen folder remain under your control.
+      </p>
+
+      <h2>Children’s privacy</h2>
+      <p>
+        Clipclap is not directed at children and is not intended for users under 13.
+      </p>
+
+      <h2>Changes</h2>
+      <p>
+        If this policy changes, the “Last updated” date above will be revised and the updated page
+        will be published at this URL.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        Questions about this policy: open an issue or contact the maintainer via
+        <a href="https://github.com/phyothihakyaw/clipclap" rel="noopener noreferrer"
+          >github.com/phyothihakyaw/clipclap</a
+        >.
+        For security issues, see
+        <a
+          href="https://github.com/phyothihakyaw/clipclap/blob/main/SECURITY.md"
+          rel="noopener noreferrer"
+          >SECURITY.md</a
+        >.
+      </p>
+    </article>
+
+    <footer class="site-footer">
+      <a href="./">Home</a>
+      <span>·</span>
+      <a href="https://github.com/phyothihakyaw/clipclap" rel="noopener noreferrer">Source</a>
+      <span>·</span>
+      <a
+        href="https://github.com/phyothihakyaw/clipclap/blob/main/LICENSE"
+        rel="noopener noreferrer"
+        >MIT</a
+      >
+    </footer>
+  </body>
+</html>

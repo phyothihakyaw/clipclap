@@ -7,6 +7,7 @@
 Local-first Chromium extension that clips a page or selection, optionally rewrites it with your OpenRouter API key, and saves the result as a file in a folder you choose.
 
 Site: [https://phyothihakyaw.github.io/clipclap/](https://phyothihakyaw.github.io/clipclap/)
+Privacy: [https://phyothihakyaw.github.io/clipclap/privacy.html](https://phyothihakyaw.github.io/clipclap/privacy.html)
 
 No Clipclap backend.
 No account.

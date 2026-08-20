@@ -3,234 +3,69 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Clipclap — local-first web clipper</title>
+    <title>Clipclap</title>
     <meta
       name="description"
-      content="Clipclap is a local-first Chromium extension that clips a page or selection, optionally rewrites it with your OpenRouter key, and saves Markdown or text to a folder you choose."
+      content="Local-first Chromium clipper: clip a page, optionally rewrite with OpenRouter, save Markdown or text on your machine."
     />
     <link rel="icon" href="assets/icon.png" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <header class="site-header">
-      <a class="brand" href="./">
-        <img src="assets/logo.png" width="40" height="40" alt="" />
-        <span>Clipclap</span>
-      </a>
-      <nav class="nav" aria-label="Page">
-        <a href="#how">How it works</a>
-        <a href="#privacy">Local-first</a>
-        <a href="#features">Features</a>
-        <a href="#requirements">Requirements</a>
-      </nav>
-    </header>
+    <main class="page">
+      <img class="logo" src="assets/logo.png" width="88" height="88" alt="Clipclap" />
+      <h1>Clipclap</h1>
+      <p class="lede">
+        Clip a page or selection, optionally rewrite it with your OpenRouter key, and save Markdown
+        or text to a folder you choose.
+      </p>
+      <p class="promise">No account. No telemetry.</p>
 
-    <main>
-      <section class="hero" aria-labelledby="hero-title">
-        <div>
-          <p class="eyebrow">Local-first Chromium clipper</p>
-          <h1 id="hero-title">Clip a page. Rewrite if you want. Save a file on your machine.</h1>
-          <p class="lede">
-            Clipclap clips a page or selection, optionally rewrites it with your OpenRouter API key,
-            and writes Markdown or plain text into a folder you grant. No Clipclap backend. No account.
-            No telemetry.
-          </p>
-          <ul class="privacy-strip" aria-label="Privacy promises">
-            <li>No Clipclap backend</li>
-            <li>No account</li>
-            <li>No telemetry</li>
-          </ul>
-          <div class="cta-row">
-            <!--
-              Chrome Web Store branding: show the official badge only when the listing is live.
-              Uncomment and set the href to the Clipclap store page. Do not wrap the badge in a
-              custom button shell. Keep clear space from the Clipclap logo.
-              <a
-                class="store-badge"
-                href="https://chromewebstore.google.com/detail/REPLACE_WITH_LISTING_ID"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src="assets/chrome-web-store-badge.png"
-                  width="206"
-                  height="58"
-                  alt="Available in the Chrome Web Store"
-                />
-              </a>
-            -->
-            <a
-              class="button"
-              href="https://github.com/phyothihakyaw/clipclap"
-              rel="noopener noreferrer"
-            >
-              View on GitHub
-            </a>
-            <a
-              class="button button-secondary"
-              href="https://github.com/phyothihakyaw/clipclap#readme"
-              rel="noopener noreferrer"
-            >
-              Read the docs
-            </a>
-          </div>
-          <p class="hero-note">
-            Chrome Web Store listing coming soon. Until then, build from source or load a release zip
-            from GitHub.
-          </p>
-        </div>
+      <div class="cta">
+        <!--
+          Official CWS badge (bordered). Uncomment when the listing is live and set href to that page.
+          Do not wrap in a custom button. Keep clear of the logo above.
+          <a
+            class="store-badge"
+            href="https://chromewebstore.google.com/detail/YOUR_EXTENSION_ID"
+            rel="noopener noreferrer"
+          >
+            <img
+              src="assets/chrome-web-store-badge.png"
+              width="206"
+              height="58"
+              alt="Available in the Chrome Web Store"
+            />
+          </a>
+        -->
+        <a
+          class="button"
+          href="https://github.com/phyothihakyaw/clipclap"
+          rel="noopener noreferrer"
+        >
+          GitHub
+        </a>
+      </div>
 
-        <div class="hero-visual" aria-hidden="true">
-          <div class="mock">
-            <p class="mock-label">Clipclap review</p>
-            <p class="mock-title">React Server Components</p>
-            <p class="mock-body">
-              Compact rewrite of the page you clipped. Edit the draft, then save it as a local note.
-            </p>
-          </div>
-          <div class="mock-file">
-            <code>react-server-components.md</code>
-            <p>YAML attributes, citation, and body — written next to your other notes.</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="how" aria-labelledby="how-title">
-        <h2 id="how-title">How it works</h2>
-        <div class="steps">
-          <article class="card">
-            <span class="step-num" aria-hidden="true">1</span>
-            <h3>Clip</h3>
-            <p>
-              Right-click the page or selection, or use
-              <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> /
-              <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd>.
-            </p>
-          </article>
-          <article class="card">
-            <span class="step-num" aria-hidden="true">2</span>
-            <h3>Review</h3>
-            <p>
-              A dedicated window opens so you can rewrite with OpenRouter, edit the draft, copy, or
-              dismiss.
-            </p>
-          </article>
-          <article class="card">
-            <span class="step-num" aria-hidden="true">3</span>
-            <h3>Save</h3>
-            <p>
-              Write Markdown (<code>.md</code> with YAML) or plain text (<code>.txt</code>) into a
-              folder you choose. Unique filenames only — never overwrites.
-            </p>
-          </article>
-        </div>
-      </section>
-
-      <section class="section" id="privacy" aria-labelledby="privacy-title">
-        <h2 id="privacy-title">Why local-first</h2>
-        <div class="pillars">
-          <article class="card">
-            <h3>Your device holds the key</h3>
-            <p>
-              The OpenRouter API key stays in extension storage. It is sent to OpenRouter only when
-              you rewrite (or when auto-rewrite is on).
-            </p>
-          </article>
-          <article class="card">
-            <h3>Your folder, your files</h3>
-            <p>
-              Saves use the File System Access API. Clipclap reads and writes only the folder you
-              grant — tested with Obsidian vaults, fine for any notes folder.
-            </p>
-          </article>
-          <article class="card">
-            <h3>No Clipclap cloud</h3>
-            <p>
-              There is no Clipclap account, analytics, or backend. Clips and settings stay on your
-              machine.
-            </p>
-          </article>
-        </div>
-      </section>
-
-      <section class="section" id="features" aria-labelledby="features-title">
-        <h2 id="features-title">Features</h2>
-        <div class="features">
-          <article class="feature">
-            <h3>Shortcuts and context menu</h3>
-            <p>Clip the full page or just the selection without leaving the tab.</p>
-          </article>
-          <article class="feature">
-            <h3>Rewrite window</h3>
-            <p>Tone harnesses, searchable model picker, optional auto rewrite and auto save.</p>
-          </article>
-          <article class="feature">
-            <h3>Markdown or plain text</h3>
-            <p>Rewrites follow the format you pick so the body matches the file type.</p>
-          </article>
-          <article class="feature">
-            <h3>Media as links</h3>
-            <p>
-              Pictures and videos become lightweight references — modest image URLs or watch/poster
-              links, not downloaded binaries.
-            </p>
-          </article>
-        </div>
-      </section>
-
-      <section class="section" id="requirements" aria-labelledby="requirements-title">
-        <h2 id="requirements-title">Requirements</h2>
-        <div class="reqs">
-          <article class="req">
-            <h3>Chromium browser</h3>
-            <p>
-              Compatible with Google Chrome™, and also Edge, Brave, and similar Chromium browsers.
-            </p>
-          </article>
-          <article class="req">
-            <h3>OpenRouter API key</h3>
-            <p>
-              v1 talks only to OpenRouter.
-              <a
-                href="https://github.com/phyothihakyaw/clipclap/blob/main/OPENROUTER.md"
-                rel="noopener noreferrer"
-                >Setup guide</a
-              >.
-            </p>
-          </article>
-          <article class="req">
-            <h3>A save folder</h3>
-            <p>Any local folder you control — vault, git repo, or plain notes directory.</p>
-          </article>
-        </div>
-      </section>
+      <p class="compat">Compatible with Google Chrome™, Edge, Brave, and similar Chromium browsers.</p>
     </main>
 
     <footer class="site-footer">
-      <div class="footer-links">
-        <a href="https://github.com/phyothihakyaw/clipclap" rel="noopener noreferrer">GitHub</a>
-        <a
-          href="https://github.com/phyothihakyaw/clipclap/blob/main/CONTRIBUTING.md"
-          rel="noopener noreferrer"
-          >Contributing</a
-        >
-        <a
-          href="https://github.com/phyothihakyaw/clipclap/blob/main/SECURITY.md"
-          rel="noopener noreferrer"
-          >Security</a
-        >
-        <a
-          href="https://github.com/phyothihakyaw/clipclap/blob/main/LICENSE"
-          rel="noopener noreferrer"
-          >MIT License</a
-        >
-      </div>
-      <p>Clipclap is a local-first web clipper. MIT licensed.</p>
+      <a href="privacy.html">Privacy</a>
+      <span>·</span>
+      <a href="https://github.com/phyothihakyaw/clipclap" rel="noopener noreferrer">Source</a>
+      <span>·</span>
+      <a
+        href="https://github.com/phyothihakyaw/clipclap/blob/main/LICENSE"
+        rel="noopener noreferrer"
+        >MIT</a
+      >
       <p class="attribution">
         Google Chrome is a trademark of Google LLC. Use of this trademark is subject to
         <a href="https://about.google/brand-resource-center/" rel="noopener noreferrer"

@@ -1,17 +1,19 @@
 <p align="center">
-  <img src="assets/logo.png" alt="Clipclap logo" width="96" height="96" />
+  <img src="assets/banner.png" alt="ClipClap — Clip the web. Save smarter notes." width="440" />
 </p>
 
 # Clipclap
 
 Local-first Chromium extension that clips a page or selection, optionally rewrites it with your OpenRouter API key, and saves the result as a file in a folder you choose.
 
+Site: [https://phyothihakyaw.github.io/clipclap/](https://phyothihakyaw.github.io/clipclap/)
+
 No Clipclap backend.
 No account.
 No telemetry.
 Your OpenRouter API key, clips, and saved files stay on your device (aside from the rewrite request you choose to send to OpenRouter).
 
-Install from the Chrome Web Store.
+Install from the Chrome Web Store (listing coming soon).
 
 ## Why it exists
 

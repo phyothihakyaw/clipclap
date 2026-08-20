@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-Security fixes are accepted against the latest `1.x` release line (currently **1.0.0**).
+Security fixes are accepted against the latest `1.x` release line (currently **1.0.1**).
 
 ## What Clipclap stores
 

@@ -98,9 +98,21 @@ h1 {
 }
 
 .button:focus-visible,
-.store-badge:focus-visible {
+.store-badge:focus-visible,
+.github-mark:focus-visible {
   outline: 3px solid rgba(15, 118, 110, 0.45);
   outline-offset: 3px;
+}
+
+.github-mark {
+  display: inline-flex;
+  line-height: 0;
+}
+
+.github-mark img {
+  width: 32px;
+  height: 32px;
+  display: block;
 }
 
 .compat {

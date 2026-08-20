@@ -51,8 +51,10 @@
       <h3>Website content</h3>
       <p>
         When you clip a page or selection, Clipclap reads that page’s content (for example text and
-        media links) in the active tab so it can show a review window and save a file.
+        media links) in the active tab only for that gesture, using temporary
+        <code>activeTab</code> access.
         Clipped content is kept in temporary session storage on your device for that flow.
+        Clipclap does not request permanent access to all websites.
       </p>
 
       <h3>Settings and save folder</h3>
@@ -122,8 +124,6 @@
 
     <footer class="site-footer">
       <a href="./">Home</a>
-      <span>·</span>
-      <a href="https://github.com/phyothihakyaw/clipclap" rel="noopener noreferrer">Source</a>
       <span>·</span>
       <a
         href="https://github.com/phyothihakyaw/clipclap/blob/main/LICENSE"

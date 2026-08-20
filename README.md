@@ -114,12 +114,12 @@ See [SECURITY.md](SECURITY.md) for reporting issues.
 
 ## Permissions (why they exist)
 
-- `activeTab` / `scripting` / host access - extract the page or selection you clip
+- `activeTab` / `scripting` - when you clip, temporarily access the active tab and inject Clipclap’s packaged script to extract the page or selection
 - `storage` - settings and last clip on device
 - `contextMenus` - right-click clip actions
 - `sidePanel` - settings UI
 - `windows` - rewrite review window
-- Network to OpenRouter - rewrite only when you ask (or when auto-rewrite is on)
+- Host access to `https://openrouter.ai/api/*` - rewrite and model list only when you ask (or when auto-rewrite is on)
 
 ## Contributing
 

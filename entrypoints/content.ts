@@ -2,7 +2,9 @@ import { extractClip } from "../lib/extract";
 import type { ClipResponse, ExtensionMessage } from "../lib/messages";
 
 export default defineContentScript({
-  matches: ["<all_urls>"],
+  // Built for programmatic inject via activeTab + scripting; not registered in the manifest.
+  registration: "runtime",
+  matches: [],
   runAt: "document_idle",
   main() {
     browser.runtime.onMessage.addListener((message: ExtensionMessage) => {

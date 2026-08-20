@@ -13,7 +13,7 @@ export default defineConfig({
       "scripting",
       "windows",
     ],
-    host_permissions: ["https://openrouter.ai/*", "<all_urls>"],
+    host_permissions: ["https://openrouter.ai/api/*"],
     action: {
       default_title: "Clipclap",
     },

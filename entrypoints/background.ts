@@ -68,19 +68,6 @@ async function clipActiveTab(
   }
 
   try {
-    const response = (await browser.tabs.sendMessage(tab.id, {
-      type: "CLIP_ACTIVE_TAB",
-      preferSelection,
-    } satisfies ExtensionMessage)) as ClipResponse | undefined;
-
-    if (response) {
-      return response;
-    }
-  } catch {
-    // Content script may not be injected yet.
-  }
-
-  try {
     await browser.scripting.executeScript({
       target: { tabId: tab.id },
       files: ["/content-scripts/content.js"],
@@ -95,13 +82,13 @@ async function clipActiveTab(
     };
   }
 
-  const retry = (await browser.tabs.sendMessage(tab.id, {
+  const response = (await browser.tabs.sendMessage(tab.id, {
     type: "CLIP_ACTIVE_TAB",
     preferSelection,
   } satisfies ExtensionMessage)) as ClipResponse | undefined;
 
   return (
-    retry ?? {
+    response ?? {
       ok: false,
       error: "Content script did not respond.",
     }

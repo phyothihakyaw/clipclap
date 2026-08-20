@@ -1,3 +1,11 @@
+# Clipclap 1.0.2
+
+Released 2026-08-20.
+
+Chrome zip: `clipclap-1.0.2-chrome.zip`
+
+---
+
 # Clipclap 1.0.0
 
 Local-first web clipper: rewrite clips with your OpenRouter API key and save Markdown or plain text to a local folder.

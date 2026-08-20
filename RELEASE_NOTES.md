@@ -1,3 +1,11 @@
+# Clipclap 1.0.1
+
+Released 2026-08-20.
+
+Chrome zip: `clipclap-1.0.1-chrome.zip`
+
+---
+
 # Clipclap 1.0.2
 
 Released 2026-08-20.

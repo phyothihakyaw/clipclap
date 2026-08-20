@@ -64,7 +64,7 @@ export function RewriteModal({
         {phase === "ask" && (
           <>
             <p className="modal-copy">
-              Rewrite this clip with your model and harness?
+              Rewrite this clip with your model and tone?
             </p>
             <pre className="modal-snippet">
               {clip.markdown.slice(0, 500)}
@@ -80,7 +80,7 @@ export function RewriteModal({
                 onClick={onSaveRaw}
                 disabled={busy}
               >
-                Save raw
+                Save without rewrite
               </button>
               <button
                 type="button"
@@ -110,7 +110,7 @@ export function RewriteModal({
             />
             <div className="row">
               <button type="button" onClick={onSave} disabled={busy || !body}>
-                Save to Obsidian
+                Save
               </button>
               <button
                 type="button"
@@ -118,7 +118,7 @@ export function RewriteModal({
                 onClick={onCopy}
                 disabled={!body}
               >
-                Copy note
+                Copy
               </button>
               <button type="button" className="ghost" onClick={onDismiss}>
                 Close

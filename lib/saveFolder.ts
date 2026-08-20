@@ -1,5 +1,6 @@
 const DB_NAME = "clipclap";
 const STORE_NAME = "handles";
+/** Legacy key kept so existing installs keep their folder permission. */
 const HANDLE_KEY = "vaultDirectory";
 
 function openDb(): Promise<IDBDatabase> {
@@ -49,18 +50,18 @@ async function idbDelete(key: string): Promise<void> {
   });
 }
 
-export async function getVaultHandle(): Promise<FileSystemDirectoryHandle | null> {
+export async function getSaveFolderHandle(): Promise<FileSystemDirectoryHandle | null> {
   return (await idbGet<FileSystemDirectoryHandle>(HANDLE_KEY)) ?? null;
 }
 
-export async function clearVaultHandle(): Promise<void> {
+export async function clearSaveFolderHandle(): Promise<void> {
   await idbDelete(HANDLE_KEY);
 }
 
-export async function pickVaultFolder(): Promise<FileSystemDirectoryHandle> {
+export async function pickSaveFolder(): Promise<FileSystemDirectoryHandle> {
   const handle = await window.showDirectoryPicker({
     mode: "readwrite",
-    id: "clipclap-vault",
+    id: "clipclap-save-folder",
   });
   await idbSet(HANDLE_KEY, handle);
   return handle;
@@ -75,7 +76,7 @@ async function ensureWritable(
   }
   const requested = await handle.requestPermission({ mode: "readwrite" });
   if (requested !== "granted") {
-    throw new Error("Write permission to the Obsidian folder was denied.");
+    throw new Error("Write permission to the save folder was denied.");
   }
   return handle;
 }
@@ -84,13 +85,15 @@ async function uniqueFileHandle(
   directory: FileSystemDirectoryHandle,
   filename: string,
 ): Promise<{ handle: FileSystemFileHandle; name: string }> {
-  const base = filename.replace(/\.md$/i, "");
-  let candidate = `${base}.md`;
+  const extensionMatch = filename.match(/(\.[^.]+)$/);
+  const extension = extensionMatch?.[1] ?? ".md";
+  const base = filename.slice(0, filename.length - extension.length) || filename;
+  let candidate = `${base}${extension}`;
   let index = 1;
   while (true) {
     try {
       await directory.getFileHandle(candidate);
-      candidate = `${base}-${index}.md`;
+      candidate = `${base}-${index}${extension}`;
       index += 1;
     } catch {
       const handle = await directory.getFileHandle(candidate, { create: true });
@@ -99,13 +102,14 @@ async function uniqueFileHandle(
   }
 }
 
-export async function writeNoteToVault(
+/** Create-only write of Markdown (with attributes) or plain text into the save folder. */
+export async function writeSavedFile(
   filename: string,
   contents: string,
 ): Promise<{ filename: string; folderName: string }> {
-  const stored = await getVaultHandle();
+  const stored = await getSaveFolderHandle();
   if (!stored) {
-    throw new Error("Choose an Obsidian vault folder first.");
+    throw new Error("Choose a save folder first.");
   }
   const directory = await ensureWritable(stored);
   const { handle, name } = await uniqueFileHandle(directory, filename);

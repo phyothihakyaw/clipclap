@@ -1,12 +1,13 @@
 import { buildSystemPrompt, buildUserPrompt } from "./harness";
 import { redactSecrets } from "./security";
-import type { ClipMetadata, ToneHarness } from "./types";
+import type { ClipMetadata, OutputFormat, ToneHarness } from "./types";
 
 export interface RewriteInput {
   apiKey: string;
   modelId: string;
   tone: ToneHarness;
   customInstructions: string;
+  outputFormat?: OutputFormat;
   meta: ClipMetadata;
   markdown: string;
 }
@@ -14,10 +15,18 @@ export interface RewriteInput {
 export { redactSecrets } from "./security";
 
 export async function rewriteClip(input: RewriteInput): Promise<string> {
-  const { apiKey, modelId, tone, customInstructions, meta, markdown } = input;
+  const {
+    apiKey,
+    modelId,
+    tone,
+    customInstructions,
+    outputFormat = "markdown",
+    meta,
+    markdown,
+  } = input;
 
   if (!apiKey.trim()) {
-    throw new Error("Add your API key in settings.");
+    throw new Error("Add your OpenRouter API key in settings.");
   }
   if (!modelId.trim()) {
     throw new Error("Choose a model before rewriting.");
@@ -28,7 +37,7 @@ export async function rewriteClip(input: RewriteInput): Promise<string> {
     headers: {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
-      "HTTP-Referer": "https://github.com/clipclap/clipclap",
+      "HTTP-Referer": "https://github.com/phyothihakyaw/clipclap",
       "X-Title": "Clipclap",
     },
     body: JSON.stringify({
@@ -37,11 +46,11 @@ export async function rewriteClip(input: RewriteInput): Promise<string> {
       messages: [
         {
           role: "system",
-          content: buildSystemPrompt(tone, customInstructions),
+          content: buildSystemPrompt(tone, customInstructions, outputFormat),
         },
         {
           role: "user",
-          content: buildUserPrompt(meta, markdown),
+          content: buildUserPrompt(meta, markdown, outputFormat),
         },
       ],
     }),

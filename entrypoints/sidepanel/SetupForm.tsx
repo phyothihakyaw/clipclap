@@ -1,22 +1,22 @@
-import { TONE_OPTIONS } from "../../lib/harness";
-import type { Settings, ToneHarness } from "../../lib/types";
+import { OUTPUT_FORMAT_OPTIONS, TONE_OPTIONS } from "../../lib/harness";
+import type { OutputFormat, Settings, ToneHarness } from "../../lib/types";
 import { ApiKeyField } from "./ApiKeyField";
 import { ModelPicker } from "./ModelPicker";
 
 interface SetupFormProps {
   settings: Settings;
-  vaultName: string;
+  folderName: string;
   onChange: (patch: Partial<Settings>) => void | Promise<void>;
-  onChooseVault: () => void | Promise<void>;
-  onClearVault: () => void | Promise<void>;
+  onChooseFolder: () => void | Promise<void>;
+  onClearFolder: () => void | Promise<void>;
 }
 
 export function SetupForm({
   settings,
-  vaultName,
+  folderName,
   onChange,
-  onChooseVault,
-  onClearVault,
+  onChooseFolder,
+  onClearFolder,
 }: SetupFormProps) {
   return (
     <div className="setup-form">
@@ -46,7 +46,27 @@ export function SetupForm({
         >
           {TONE_OPTIONS.map((option) => (
             <option key={option.id} value={option.id}>
-              {option.label} — {option.description}
+              {option.label} - {option.description}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="field">
+        <label htmlFor="output-format">Save format</label>
+        <select
+          id="output-format"
+          className="input"
+          value={settings.outputFormat}
+          onChange={(event) =>
+            void onChange({
+              outputFormat: event.target.value as OutputFormat,
+            })
+          }
+        >
+          {OUTPUT_FORMAT_OPTIONS.map((option) => (
+            <option key={option.id} value={option.id}>
+              {option.label}
             </option>
           ))}
         </select>
@@ -62,30 +82,30 @@ export function SetupForm({
           onChange={(event) =>
             void onChange({ customInstructions: event.target.value })
           }
-          placeholder="Optional. Example: extract only the API surface"
+          placeholder="Optional. Example: Always write short and simple sentences. Avoid lists and emojis."
         />
       </div>
 
       <div className="field">
-        <label>Obsidian vault folder</label>
+        <label>Save folder</label>
         <div className="row">
-          <button type="button" onClick={() => void onChooseVault()}>
-            {vaultName ? "Change folder" : "Choose folder"}
+          <button type="button" onClick={() => void onChooseFolder()}>
+            {folderName ? "Change folder" : "Choose folder"}
           </button>
-          {vaultName && (
+          {folderName && (
             <button
               type="button"
               className="ghost"
-              onClick={() => void onClearVault()}
+              onClick={() => void onClearFolder()}
             >
               Clear
             </button>
           )}
         </div>
         <p className="hint">
-          {vaultName
-            ? `Saving into: ${vaultName}`
-            : "Pick the vault folder (or a subfolder) where notes should land."}
+          {folderName
+            ? `Saving into: ${folderName}`
+            : "Pick any local folder for .md or .txt files."}
         </p>
       </div>
 
@@ -97,7 +117,7 @@ export function SetupForm({
             void onChange({ citationEnabled: event.target.checked })
           }
         />
-        Include citation block
+        Include citation / source line
       </label>
 
       <label className="check">
@@ -114,12 +134,12 @@ export function SetupForm({
       <label className="check">
         <input
           type="checkbox"
-          checked={settings.autoSaveToObsidian}
+          checked={settings.autoSave}
           onChange={(event) =>
-            void onChange({ autoSaveToObsidian: event.target.checked })
+            void onChange({ autoSave: event.target.checked })
           }
         />
-        Auto save rewritten notes to Obsidian
+        Auto save after rewrite
       </label>
     </div>
   );

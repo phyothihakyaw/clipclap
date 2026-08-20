@@ -27,13 +27,13 @@ export function ApiKeyField({
   if (hasKey && !replacing) {
     return (
       <div className="field">
-        <label>API key</label>
+        <label>OpenRouter API key</label>
         <div
           className="api-key-mask"
           onCopy={(event) => event.preventDefault()}
           onCut={(event) => event.preventDefault()}
           onContextMenu={(event) => event.preventDefault()}
-          aria-label="API key is set and hidden"
+          aria-label="OpenRouter API key is set and hidden"
         >
           ••••••••••••••••••••
         </div>
@@ -65,7 +65,7 @@ export function ApiKeyField({
 
   return (
     <div className="field">
-      <label htmlFor="api-key">API key</label>
+      <label htmlFor="api-key">OpenRouter API key</label>
       <input
         id="api-key"
         className="input"
@@ -83,7 +83,7 @@ export function ApiKeyField({
             void commitDraft();
           }
         }}
-        placeholder="Paste your API key, then leave the field"
+        placeholder="Paste your OpenRouter API key, then leave the field"
       />
       <div className="row">
         <button
@@ -107,8 +107,18 @@ export function ApiKeyField({
         )}
       </div>
       <p className="hint">
-        Paste only. After save, the key is masked and not copyable.
-      </p>
+          Paste your OpenRouter key, then save.
+          After save, the key is masked and not copyable.
+          Need help getting a key?{" "}
+          <a
+            href="https://github.com/phyothihakyaw/clipclap/blob/main/OPENROUTER.md"
+            target="_blank"
+            rel="noreferrer"
+          >
+            OpenRouter setup guide
+          </a>
+          .
+        </p>
     </div>
   );
 }

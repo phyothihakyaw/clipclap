@@ -4,7 +4,7 @@ import {
   REWRITE_WINDOW_ID_KEY,
   setLastStatus,
 } from "../lib/messages";
-import { getVaultHandle } from "../lib/obsidian";
+import { getSaveFolderHandle } from "../lib/saveFolder";
 import { loadSettings } from "../lib/settings";
 import { isSetupReady } from "../lib/types";
 
@@ -110,7 +110,7 @@ async function clipActiveTab(
 
 async function clipAndReview(preferSelection: boolean): Promise<ClipResponse> {
   const settings = await loadSettings();
-  const handle = await getVaultHandle();
+  const handle = await getSaveFolderHandle();
   if (!isSetupReady(settings, Boolean(handle))) {
     await setLastStatus("error", "Finish setup before clipping.");
     await openSidePanel();

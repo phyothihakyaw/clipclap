@@ -1,5 +1,8 @@
 export type ToneHarness = "personal" | "public" | "compact" | "none";
 
+/** How rewritten clips are prompted and written to disk. */
+export type OutputFormat = "markdown" | "plaintext";
+
 export interface ClipMetadata {
   title: string;
   url: string;
@@ -10,7 +13,6 @@ export interface ClipMetadata {
 
 export interface ClipPayload {
   markdown: string;
-  html: string;
   mode: "selection" | "page";
   meta: ClipMetadata;
 }
@@ -20,11 +22,13 @@ export interface Settings {
   modelId: string;
   tone: ToneHarness;
   customInstructions: string;
+  /** markdown: .md with YAML attributes; plaintext: .txt body only */
+  outputFormat: OutputFormat;
   citationEnabled: boolean;
-  vaultFolderName: string;
+  saveFolderName: string;
   setupComplete: boolean;
   autoRewrite: boolean;
-  autoSaveToObsidian: boolean;
+  autoSave: boolean;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -32,22 +36,26 @@ export const DEFAULT_SETTINGS: Settings = {
   modelId: "",
   tone: "compact",
   customInstructions: "",
+  outputFormat: "markdown",
   citationEnabled: true,
-  vaultFolderName: "",
+  saveFolderName: "",
   setupComplete: false,
   autoRewrite: false,
-  autoSaveToObsidian: false,
+  autoSave: false,
 };
 
 export const SETTINGS_KEY = "clipclap.settings";
 export const MODELS_CACHE_KEY = "clipclap.models.cache";
 
-export function isSetupReady(settings: Settings, hasVaultHandle: boolean): boolean {
+export function isSetupReady(
+  settings: Settings,
+  hasSaveFolderHandle: boolean,
+): boolean {
   return Boolean(
     settings.apiKey.trim() &&
       settings.modelId.trim() &&
-      settings.vaultFolderName.trim() &&
-      hasVaultHandle &&
+      settings.saveFolderName.trim() &&
+      hasSaveFolderHandle &&
       settings.setupComplete,
   );
 }

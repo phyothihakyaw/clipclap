@@ -25,11 +25,11 @@ const CACHE_TTL_MS = 1000 * 60 * 60 * 6;
 
 export function formatPrice(pricePerToken?: string): string {
   if (pricePerToken == null || pricePerToken === "") {
-    return "—";
+    return "-";
   }
   const perToken = Number(pricePerToken);
   if (!Number.isFinite(perToken)) {
-    return "—";
+    return "-";
   }
   if (perToken === 0) {
     return "free";
@@ -85,7 +85,7 @@ export async function fetchModels(
   options: { force?: boolean } = {},
 ): Promise<OpenRouterModel[]> {
   if (!apiKey.trim()) {
-    throw new Error("API key is required to load models.");
+    throw new Error("OpenRouter API key is required to load models.");
   }
 
   if (!options.force) {
@@ -98,7 +98,7 @@ export async function fetchModels(
   const response = await fetch("https://openrouter.ai/api/v1/models", {
     headers: {
       Authorization: `Bearer ${apiKey}`,
-      "HTTP-Referer": "https://github.com/clipclap/clipclap",
+      "HTTP-Referer": "https://github.com/phyothihakyaw/clipclap",
       "X-Title": "Clipclap",
     },
   });

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import {
-  clearVaultHandle,
-  getVaultHandle,
-  pickVaultFolder,
-} from "../../lib/obsidian";
+  clearSaveFolderHandle,
+  getSaveFolderHandle,
+  pickSaveFolder,
+} from "../../lib/saveFolder";
 import { loadSettings, saveSettings } from "../../lib/settings";
 import type { Settings } from "../../lib/types";
 import { isSetupReady } from "../../lib/types";
@@ -17,20 +17,34 @@ type Status =
 
 export function App() {
   const [settings, setSettings] = useState<Settings | null>(null);
-  const [vaultName, setVaultName] = useState("");
-  const [hasVaultHandle, setHasVaultHandle] = useState(false);
+  const [folderName, setFolderName] = useState("");
+  const [hasSaveFolderHandle, setHasSaveFolderHandle] = useState(false);
   const [status, setStatus] = useState<Status>({ kind: "idle" });
+  const [bootError, setBootError] = useState<string | null>(null);
 
   useEffect(() => {
     void (async () => {
-      const loaded = await loadSettings();
-      setSettings(loaded);
-      const handle = await getVaultHandle();
-      setHasVaultHandle(Boolean(handle));
-      if (handle) {
-        setVaultName(handle.name);
-      } else if (loaded.vaultFolderName) {
-        setVaultName(loaded.vaultFolderName);
+      try {
+        const loaded = await loadSettings();
+        setSettings(loaded);
+
+        let handle = null;
+        try {
+          handle = await getSaveFolderHandle();
+        } catch {
+          handle = null;
+        }
+
+        setHasSaveFolderHandle(Boolean(handle));
+        if (handle) {
+          setFolderName(handle.name);
+        } else if (loaded.saveFolderName) {
+          setFolderName(loaded.saveFolderName);
+        }
+      } catch (error) {
+        setBootError(
+          error instanceof Error ? error.message : "Failed to load settings",
+        );
       }
     })();
   }, []);
@@ -41,15 +55,15 @@ export function App() {
     return next;
   }
 
-  async function handleChooseVault() {
+  async function handleChooseFolder() {
     try {
-      const handle = await pickVaultFolder();
-      setVaultName(handle.name);
-      setHasVaultHandle(true);
-      await patchSettings({ vaultFolderName: handle.name });
+      const handle = await pickSaveFolder();
+      setFolderName(handle.name);
+      setHasSaveFolderHandle(true);
+      await patchSettings({ saveFolderName: handle.name });
       setStatus({
         kind: "success",
-        message: `Vault folder set to ${handle.name}`,
+        message: `Save folder set to ${handle.name}`,
       });
     } catch (error) {
       if (error instanceof DOMException && error.name === "AbortError") {
@@ -62,12 +76,12 @@ export function App() {
     }
   }
 
-  async function handleClearVault() {
-    await clearVaultHandle();
-    setVaultName("");
-    setHasVaultHandle(false);
-    await patchSettings({ vaultFolderName: "", setupComplete: false });
-    setStatus({ kind: "info", message: "Vault folder cleared." });
+  async function handleClearFolder() {
+    await clearSaveFolderHandle();
+    setFolderName("");
+    setHasSaveFolderHandle(false);
+    await patchSettings({ saveFolderName: "", setupComplete: false });
+    setStatus({ kind: "info", message: "Save folder cleared." });
   }
 
   async function finishOrSave() {
@@ -75,15 +89,15 @@ export function App() {
       return;
     }
     if (!settings.apiKey.trim()) {
-      setStatus({ kind: "error", message: "Add an API key." });
+      setStatus({ kind: "error", message: "Add an OpenRouter API key." });
       return;
     }
     if (!settings.modelId.trim()) {
       setStatus({ kind: "error", message: "Choose a model." });
       return;
     }
-    if (!hasVaultHandle || !settings.vaultFolderName.trim()) {
-      setStatus({ kind: "error", message: "Choose an Obsidian vault folder." });
+    if (!hasSaveFolderHandle || !settings.saveFolderName.trim()) {
+      setStatus({ kind: "error", message: "Choose a save folder." });
       return;
     }
 
@@ -96,11 +110,19 @@ export function App() {
     });
   }
 
+  if (bootError) {
+    return (
+      <div className="app">
+        <div className="status error">{bootError}</div>
+      </div>
+    );
+  }
+
   if (!settings) {
     return <div className="app loading">Loading…</div>;
   }
 
-  const incomplete = !isSetupReady(settings, hasVaultHandle);
+  const incomplete = !isSetupReady(settings, hasSaveFolderHandle);
 
   return (
     <div className="app">
@@ -113,20 +135,13 @@ export function App() {
         </div>
       </header>
 
-      {incomplete && (
-        <div className="status info">
-          Clip page and selection live in the right-click menu and shortcuts
-          (Alt+Shift+C / Alt+Shift+S). This panel is for setup only.
-        </div>
-      )}
-
       <section className="card">
         <SetupForm
           settings={settings}
-          vaultName={vaultName}
+          folderName={folderName}
           onChange={(patch) => void patchSettings(patch)}
-          onChooseVault={() => void handleChooseVault()}
-          onClearVault={() => void handleClearVault()}
+          onChooseFolder={() => void handleChooseFolder()}
+          onClearFolder={() => void handleClearFolder()}
         />
         <button type="button" onClick={() => void finishOrSave()}>
           {incomplete ? "Finish setup" : "Save settings"}

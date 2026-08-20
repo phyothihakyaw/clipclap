@@ -37,7 +37,7 @@ export function ModelPicker({
   async function loadModels(force = false) {
     if (!apiKey.trim()) {
       setModels([]);
-      setError("Add an API key to load models.");
+      setError("Add an OpenRouter API key to load models.");
       return;
     }
     setLoading(true);

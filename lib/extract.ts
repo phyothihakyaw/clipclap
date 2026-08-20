@@ -1,15 +1,50 @@
 import { Readability } from "@mozilla/readability";
 import TurndownService from "turndown";
 import { gfm } from "turndown-plugin-gfm";
+import {
+  audioToMarkdown,
+  iframeToMarkdown,
+  imgToMarkdown,
+  videoToMarkdown,
+} from "./media";
 import type { ClipMetadata, ClipPayload } from "./types";
 
-function createTurndown(): TurndownService {
+function createTurndown(baseUrl: string, pageUrl: string): TurndownService {
   const turndown = new TurndownService({
     headingStyle: "atx",
     codeBlockStyle: "fenced",
     bulletListMarker: "-",
   });
   turndown.use(gfm);
+
+  turndown.addRule("clipclapImage", {
+    filter: "img",
+    replacement(_content, node) {
+      return imgToMarkdown(node as HTMLElement, baseUrl);
+    },
+  });
+
+  turndown.addRule("clipclapVideo", {
+    filter: "video",
+    replacement(_content, node) {
+      return videoToMarkdown(node as HTMLElement, baseUrl, pageUrl);
+    },
+  });
+
+  turndown.addRule("clipclapAudio", {
+    filter: "audio",
+    replacement(_content, node) {
+      return audioToMarkdown(node as HTMLElement, baseUrl, pageUrl);
+    },
+  });
+
+  turndown.addRule("clipclapIframe", {
+    filter: "iframe",
+    replacement(_content, node) {
+      return iframeToMarkdown(node as HTMLElement, baseUrl);
+    },
+  });
+
   return turndown;
 }
 
@@ -69,8 +104,9 @@ function pageHtml(): string {
 }
 
 export function extractClip(preferSelection = true): ClipPayload {
-  const turndown = createTurndown();
   const meta = readMeta();
+  const baseUrl = document.baseURI || meta.url || location.href;
+  const turndown = createTurndown(baseUrl, meta.url);
   const selected = preferSelection ? selectionHtml() : null;
   const html = selected ?? pageHtml();
   const markdown = turndown.turndown(html).trim();
@@ -78,12 +114,11 @@ export function extractClip(preferSelection = true): ClipPayload {
   if (selected) {
     const text = window.getSelection()?.toString().trim();
     if (text && text.length < 120) {
-      meta.title = `${meta.title} — selection`;
+      meta.title = `${meta.title} - selection`;
     }
   }
 
   return {
-    html,
     markdown: markdown || "(empty clip)",
     mode: selected ? "selection" : "page",
     meta,

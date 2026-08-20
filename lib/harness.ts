@@ -1,13 +1,29 @@
-import type { ClipMetadata, ToneHarness } from "./types";
+import type { ClipMetadata, OutputFormat, ToneHarness } from "./types";
 
-const BASE_RULES = [
+const SHARED_RULES = [
   "Do not invent facts, numbers, names, or quotes that were not in the source.",
   "Leave code blocks, commands, shell output, and error messages unchanged.",
   "Drop navigation, ads, cookie banners, footers, and other boilerplate.",
   "Do not invent or alter the source URL. Citation details will be added separately.",
+  "Keep figure, image, video, and audio references from the source, including their URLs.",
+  "Do not drop, invent, download, transcribe, or describe media that is not already labeled in the source.",
+].join("\n");
+
+const MARKDOWN_RULES = [
+  SHARED_RULES,
   "Start with a single markdown H1 heading that is a short, specific title (about 3 to 8 words).",
   "Do not append words like Notes, Note, Summary, or Clipping to the H1 title.",
+  "Preserve markdown image and media links (for example ![alt](url) and [Video: title](url)).",
   "Return markdown only. No preamble or closing remarks.",
+].join("\n");
+
+const PLAINTEXT_RULES = [
+  SHARED_RULES,
+  "Start with a short, specific title on the first line (about 3 to 8 words), then a blank line, then the body.",
+  "Do not append words like Notes, Note, Summary, or Clipping to the title.",
+  "Return plain text only. No markdown headings, bold, italic, links, or bullet markers unless they appear as literal source text.",
+  "Convert image and media references to plain lines like Image: alt (url) or Video: title (url).",
+  "No preamble or closing remarks.",
 ].join("\n");
 
 const HARNESS_PROMPTS: Record<ToneHarness, string> = {
@@ -23,8 +39,11 @@ const HARNESS_PROMPTS: Record<ToneHarness, string> = {
 export function buildSystemPrompt(
   tone: ToneHarness,
   customInstructions: string,
+  outputFormat: OutputFormat = "markdown",
 ): string {
-  const parts = [BASE_RULES];
+  const parts = [
+    outputFormat === "plaintext" ? PLAINTEXT_RULES : MARKDOWN_RULES,
+  ];
   const harness = HARNESS_PROMPTS[tone];
   if (harness) {
     parts.push(harness);
@@ -36,7 +55,12 @@ export function buildSystemPrompt(
   return parts.join("\n\n");
 }
 
-export function buildUserPrompt(meta: ClipMetadata, markdown: string): string {
+export function buildUserPrompt(
+  meta: ClipMetadata,
+  markdown: string,
+  outputFormat: OutputFormat = "markdown",
+): string {
+  const fence = outputFormat === "plaintext" ? "text" : "markdown";
   return [
     `Title: ${meta.title}`,
     `URL: ${meta.url}`,
@@ -44,7 +68,7 @@ export function buildUserPrompt(meta: ClipMetadata, markdown: string): string {
     meta.author ? `Author: ${meta.author}` : null,
     "",
     "Source content:",
-    "```markdown",
+    `\`\`\`${fence}`,
     markdown,
     "```",
   ]
@@ -76,5 +100,19 @@ export const TONE_OPTIONS: Array<{
     id: "none",
     label: "None",
     description: "Custom instructions only",
+  },
+];
+
+export const OUTPUT_FORMAT_OPTIONS: Array<{
+  id: OutputFormat;
+  label: string;
+}> = [
+  {
+    id: "markdown",
+    label: "Markdown (*.md)",
+  },
+  {
+    id: "plaintext",
+    label: "Plain text (*.txt)",
   },
 ];

@@ -10,7 +10,7 @@ import {
   LAST_CLIP_KEY,
   setLastStatus,
 } from "../../lib/messages";
-import { writeNoteToVault } from "../../lib/obsidian";
+import { writeSavedFile } from "../../lib/saveFolder";
 import { redactSecrets, rewriteClip } from "../../lib/rewrite";
 import { loadSettings, saveSettings } from "../../lib/settings";
 import { compactTitle } from "../../lib/title";
@@ -54,6 +54,7 @@ export function App() {
         modelId: current.modelId,
         tone: current.tone,
         customInstructions: current.customInstructions,
+        outputFormat: current.outputFormat,
         meta: payload.meta,
         markdown: payload.markdown,
       });
@@ -61,10 +62,10 @@ export function App() {
       setModalPhase("result");
       await setLastStatus(
         "success",
-        `Rewrote: ${resolveNoteTitle(payload.meta, rewritten)}`,
+        `Rewrote: ${resolveNoteTitle(payload.meta, rewritten, current.outputFormat)}`,
       );
 
-      if (current.autoSaveToObsidian) {
+      if (current.autoSave) {
         await saveBody(payload, rewritten, current);
       }
     } catch (error) {
@@ -89,10 +90,15 @@ export function App() {
       body,
       tone: current.tone,
       citationEnabled: current.citationEnabled,
+      outputFormat: current.outputFormat,
     });
-    const filename = buildFilename(payload.meta, body);
-    const result = await writeNoteToVault(filename, document);
-    await saveSettings({ vaultFolderName: result.folderName });
+    const filename = buildFilename(
+      payload.meta,
+      body,
+      current.outputFormat,
+    );
+    const result = await writeSavedFile(filename, document);
+    await saveSettings({ saveFolderName: result.folderName });
     setSavedFilename(result.filename);
     await setLastStatus(
       "success",
@@ -233,6 +239,7 @@ export function App() {
                 body: modalBody,
                 tone: settings.tone,
                 citationEnabled: settings.citationEnabled,
+                outputFormat: settings.outputFormat,
               });
               await navigator.clipboard.writeText(document);
               await setLastStatus("success", "Copied note to clipboard.");

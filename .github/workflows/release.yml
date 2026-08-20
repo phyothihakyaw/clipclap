@@ -1,0 +1,147 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: Semver bump for package.json / extension manifest
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+        default: patch
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump version
+        id: version
+        env:
+          BUMP: ${{ inputs.bump }}
+        run: |
+          case "$BUMP" in
+            patch|minor|major) ;;
+            *) echo "Invalid bump: $BUMP"; exit 1 ;;
+          esac
+          npm version "$BUMP" --no-git-tag-version
+          VERSION="$(node -p "require('./package.json').version")"
+          {
+            echo "version=${VERSION}"
+            echo "tag=v${VERSION}"
+            echo "zip=clipclap-${VERSION}-chrome.zip"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Write release notes
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          ZIP: ${{ steps.version.outputs.zip }}
+        run: |
+          DATE="$(date -u +%Y-%m-%d)"
+          {
+            echo "# Clipclap ${VERSION}"
+            echo
+            echo "Released ${DATE}."
+            echo
+            echo "- Chrome package: \`${ZIP}\`"
+            echo "- Install via Chrome Web Store when published, or Load unpacked from the unzipped build"
+            echo
+            echo "See [RELEASE_NOTES.md](RELEASE_NOTES.md) and [README.md](README.md) for product details."
+          } > .release-body.md
+
+          {
+            echo "# Clipclap ${VERSION}"
+            echo
+            echo "Released ${DATE}."
+            echo
+            echo "Chrome zip: \`${ZIP}\`"
+            echo
+            echo "---"
+            echo
+            cat RELEASE_NOTES.md
+          } > RELEASE_NOTES.md.tmp
+          mv RELEASE_NOTES.md.tmp RELEASE_NOTES.md
+
+      - name: Typecheck
+        run: npm run compile
+
+      - name: Zip extension
+        run: npm run zip
+
+      - name: Verify zip artifact
+        env:
+          ZIP: ${{ steps.version.outputs.zip }}
+        run: |
+          test -f ".output/${ZIP}"
+          ls -lh ".output/${ZIP}"
+
+      - name: Commit version bump
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          git add package.json package-lock.json RELEASE_NOTES.md
+          git commit -m "chore: release ${TAG}"
+          git tag -a "${TAG}" -m "Clipclap ${VERSION}"
+          git push origin HEAD
+          git push origin "${TAG}"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: Clipclap ${{ steps.version.outputs.version }}
+          body_path: .release-body.md
+          files: .output/${{ steps.version.outputs.zip }}
+          fail_on_unmatched_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload to Chrome Web Store
+        env:
+          EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
+          CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
+          ZIP: ${{ steps.version.outputs.zip }}
+        run: |
+          if [ -z "$EXTENSION_ID" ] || [ -z "$CLIENT_ID" ] || [ -z "$CLIENT_SECRET" ] || [ -z "$REFRESH_TOKEN" ]; then
+            echo "Chrome Web Store secrets not fully configured; skipping store upload."
+            echo "Set CHROME_EXTENSION_ID, CHROME_CLIENT_ID, CHROME_CLIENT_SECRET, and CHROME_REFRESH_TOKEN to enable."
+            exit 0
+          fi
+          npx --yes chrome-webstore-upload-cli@3 upload \
+            --source ".output/${ZIP}" \
+            --extension-id "$EXTENSION_ID" \
+            --client-id "$CLIENT_ID" \
+            --client-secret "$CLIENT_SECRET" \
+            --refresh-token "$REFRESH_TOKEN" \
+            --auto-publish

@@ -1,0 +1,39 @@
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+.rewrite-app {
+  min-height: 100vh;
+  padding: 14px;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.rewrite-app.loading {
+  color: var(--muted);
+}
+
+.rewrite-app h1 {
+  margin: 0 0 8px;
+  font-size: 1.2rem;
+}
+
+.footer-meta {
+  margin-top: 10px;
+  font-size: 12px;
+}
+
+.modal-embedded {
+  position: static;
+  inset: auto;
+  background: transparent;
+  padding: 0;
+  display: block;
+}
+
+.modal-embedded .modal {
+  width: 100%;
+  box-shadow: none;
+}

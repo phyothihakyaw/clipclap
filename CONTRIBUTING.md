@@ -1,12 +1,9 @@
 # Contributing to Clipclap
 
-Clipclap is meant to keep growing: more browsers, clearer rewriting options, better note destinations, and anything that keeps it local-first and useful.
+Thanks for helping improve Clipclap.
+This project is a local-first browser extension for clipping, rewriting, and saving notes or text.
+It should keep growing: more browsers, clearer rewriting options, better destinations, and anything that stays local-first and useful.
 
-The **Chrome Web Store listing** is the product users should install and update.
-This repo is where we build and improve that extension together.
-Load unpacked builds are for development and review, not a parallel install path for end users.
-
-Thanks for helping make Clipclap better.
 Please keep user privacy and save-folder safety as hard requirements.
 
 ## Ground rules
@@ -53,13 +50,13 @@ npm run dev
    - Save folder
    - Optional auto rewrite / auto save
 
-Production build (for local verification):
+Production build:
 
 ```bash
 npm run build
 ```
 
-Load `.output/chrome-mv3` the same way while testing.
+Load `.output/chrome-mv3` the same way.
 
 Useful scripts:
 
@@ -93,10 +90,7 @@ Maintainers cut releases from GitHub Actions (**Release** workflow), not from ad
 1. Ensure the default branch is green on CI
 2. Actions → **Release** → **Run workflow** → choose `patch` / `minor` / `major`
 3. The job bumps the version, zips the extension, pushes tag `vX.Y.Z`, and creates a GitHub Release
-4. Maintainers publish the new package to the Chrome Web Store so store users get the update
-
-The store listing remains the source of truth for what people install.
-GitHub Releases document what shipped; they are not a substitute install channel for general users.
+4. Publish the package to the Chrome Web Store when you are ready for store users to get the update
 
 ## Reporting security issues
 

@@ -72,10 +72,9 @@ jobs:
             echo "Released ${DATE}."
             echo
             echo "- Chrome package: \`${ZIP}\`"
-            echo "- Install and update from the Chrome Web Store"
             echo
             echo "See [RELEASE_NOTES.md](RELEASE_NOTES.md) and [README.md](README.md) for product details."
-            echo "Developers: [CONTRIBUTING.md](CONTRIBUTING.md)."
+            echo "Want to help improve Clipclap? See [CONTRIBUTING.md](CONTRIBUTING.md)."
           } > .release-body.md
 
           {

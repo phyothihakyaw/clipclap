@@ -124,24 +124,3 @@ jobs:
           fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload to Chrome Web Store
-        env:
-          EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
-          CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
-          CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
-          REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
-          ZIP: ${{ steps.version.outputs.zip }}
-        run: |
-          if [ -z "$EXTENSION_ID" ] || [ -z "$CLIENT_ID" ] || [ -z "$CLIENT_SECRET" ] || [ -z "$REFRESH_TOKEN" ]; then
-            echo "Chrome Web Store secrets not fully configured; skipping store upload."
-            echo "Set CHROME_EXTENSION_ID, CHROME_CLIENT_ID, CHROME_CLIENT_SECRET, and CHROME_REFRESH_TOKEN to enable."
-            exit 0
-          fi
-          npx --yes chrome-webstore-upload-cli@3 upload \
-            --source ".output/${ZIP}" \
-            --extension-id "$EXTENSION_ID" \
-            --client-id "$CLIENT_ID" \
-            --client-secret "$CLIENT_SECRET" \
-            --refresh-token "$REFRESH_TOKEN" \
-            --auto-publish

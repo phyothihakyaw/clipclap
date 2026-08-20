@@ -78,27 +78,11 @@ Maintainers cut releases from GitHub Actions (**Release** workflow), not from ad
 
 1. Ensure the default branch is green on CI
 2. Actions → **Release** → **Run workflow** → choose `patch` / `minor` / `major`
-3. The job bumps the version, zips the extension, pushes tag `vX.Y.Z`, and creates a GitHub Release
+3. The job bumps the version, zips the extension, pushes tag `vX.Y.Z`, and creates a GitHub Release with the Chrome zip attached
+4. Download that zip from the GitHub Release and upload it manually in the Chrome Web Store developer dashboard
 
 A GitHub Release zip does not auto-update Load unpacked installs.
-Chrome Web Store listing updates installed users.
-
-### Chrome Web Store upload secrets
-
-Optional store publish uses repository secrets only (never commit them).
-In the repo: **Settings → Secrets and variables → Actions**:
-
-| Secret | What it is |
-| --- | --- |
-| `CHROME_EXTENSION_ID` | Extension ID from the Chrome Web Store developer dashboard |
-| `CHROME_CLIENT_ID` | OAuth 2.0 client ID (Google Cloud project linked to the Web Store API) |
-| `CHROME_CLIENT_SECRET` | OAuth 2.0 client secret |
-| `CHROME_REFRESH_TOKEN` | Refresh token for that OAuth client with Web Store publish scope |
-
-Setup guide: [Using the Chrome Web Store API](https://developer.chrome.com/docs/webstore/using-api).
-
-When all four are set, the Release workflow uploads the zip and auto-publishes.
-If any are missing, store upload is skipped and the GitHub Release still succeeds.
+Chrome Web Store listing updates installed users after you publish the package there.
 
 ## Reporting security issues
 
